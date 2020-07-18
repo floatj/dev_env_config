@@ -1,0 +1,51 @@
+# firefox profile manager
+alias firefox='/Applications/Firefox.app/Contents/MacOS/firefox-bin -P'
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+. "/usr/local/opt/nvm/nvm.sh"
+
+# Android SDK
+ANDROID_HOME='~/Library/Android/sdk'
+export PATH="/Users/floatj/Library/Android/sdk/platform-tools":$PATH
+
+# adb
+alias adb='~/Library/Android/sdk/platform-tools/adb'
+# logcat
+#alias mrbsocket='~/Library/Android/sdk/platform-tools/adb logcat |grep "MrbSocket"'
+#'~/Library/Android/sdk/platform-tools/adb logcat -s "F23ko"'
+
+# bs ssh
+# alias bs='~/script/bs.sh'
+# alias ka='~/script/kaguya.sh'
+
+# git
+alias gs='git status'
+alias gl='git log'
+alias gd='git diff'
+alias gb='git branch'
+#alias gpgp='git push gh; git push origin'   #push to GitHub & Gitea(RPi3)
+
+# watchman
+alias ws='watchman shutdown-server'
+
+# color and git branch
+# get git branch name
+function git_branch {
+  # 取得git branch，若此資料夾沒有git brangh，則將錯誤訊息丟至回收桶，回傳空值
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || return;
+  # 若有取得git branch，則將取得的名稱「ref/heads/branchname」，並將前面的前贅詞去除，只保留branch名稱
+
+  branch_name=${ref#refs/heads/} ;
+  echo "("${ref#refs/heads/}") ";
+}
+
+# 設定prompt名稱為 [資料夾路徑 現在時間] (branch)
+pre="\[\e[1;30m\][\[\e[0m\]"
+pre_nc=""
+colorful_prompt="\[\e[0;32m\]\u\[\e[0m\]\[\e[1;30m\]  \[\e[0m\]\[\e[1;34m\]\h\[\e[0m\]\[\e[1;30m\]:\[\e[0m\]\[\e[1;37m\]\w\[\e[0m\]\[\e[0m\]"
+end="\[\e[1;30m\]]\[\e[0m\]"
+end_nc=""
+
+branch_name=" \[\e[1;36m\]\$(git_branch)\[\e[0m\]"
+PS1=$pre_nc$colorful_prompt$end_nc$branch_name
